@@ -5,18 +5,19 @@ let humidity;
 let windSpeed;
 let uvIndex;
 let currentQueryURL;
-let currentPosition = navigator.geolocation.getCurrentPosition(getCity);
+let longitude;
+let latitude;
+let currentPosition = navigator.geolocation.getCurrentPosition(getCurrentCity);
 
-function getCity(pos) {
-
-    let longitude = pos.coords.longitude;
-    let latitude = pos.coords.latitude;
+function getCurrentCity(pos) {
+    longitude = pos.coords.longitude;
+    latitude = pos.coords.latitude;
     $.ajax({
         url: "https://us1.locationiq.com/v1/reverse.php?key=a1afd1ebbc7af7&lat=" + latitude + "&lon=" + longitude + "&format=json",
         type: "GET"
     }).then(function (response) {
         city = response.address.city;
-        currentWeatherCall(city, latitude, longitude);
+        currentWeatherCall(city);
     })
 }
 
@@ -39,27 +40,28 @@ $("#searchButton").on("click", function (e) {
     currentWeatherCall(searchValue);
 })
 
-function currentWeatherCall(city, latitude, longitude) {
-    uvIndex = uvCall(latitude, longitude);
+function currentWeatherCall(city) {
     currentQueryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=6133582a13f76cf0a556408e3196e907&units=imperial";
     $.ajax({
         url: currentQueryURL,
         type: "GET"
-    }).then(function (response) {
+    }).done(function (response) {
         city = response.name;
         temp = response.main.temp;
         humidity = response.main.humidity;
         windSpeed = response.wind.speed;
-
-        weatherDisplay(city, temp, humidity, windSpeed, uvIndex);
+        latitude = response.coord.lat;
+        longitude = response.coord.lon;
+        uvCall(latitude, longitude, city, temp, humidity, windSpeed);
     })
 }
 
-function uvCall(latitude, longitude){
+function uvCall(latitude, longitude, city, temp, humidity, windSpeed) {
     $.ajax({
         url: "http://api.openweathermap.org/data/2.5/uvi?appid=6133582a13f76cf0a556408e3196e907&lat=" + latitude + "&lon=" + longitude,
         type: "GET"
-    }).then(function(response){
+    }).done(function (response) {
         uvIndex = response.value;
+        weatherDisplay(city, temp, humidity, windSpeed, uvIndex)
     })
 }
