@@ -18,6 +18,7 @@ function getCurrentCity(pos) {
     }).then(function (response) {
         city = response.address.city;
         currentWeatherCall(city);
+        forcastWeatherCall(city);
     })
 }
 
@@ -38,6 +39,7 @@ function weatherDisplay(city, temp, humidity, windSpeed, uvIndex) {
 $("#searchButton").on("click", function (e) {
     let searchValue = $("#searchBox").val().trim();
     currentWeatherCall(searchValue);
+    forcastWeatherCall(searchValue);
 })
 
 function currentWeatherCall(city) {
@@ -64,4 +66,22 @@ function uvCall(latitude, longitude, city, temp, humidity, windSpeed) {
         uvIndex = response.value;
         weatherDisplay(city, temp, humidity, windSpeed, uvIndex)
     })
+}
+
+$("#menu").on("click", "button", function(e){
+    let searchValue = e.target.textContent;
+    currentWeatherCall(searchValue);
+    forcastWeatherCall(searchValue);
+    $("#searchBox").val("");
+})
+
+function forcastWeatherCall(city) {
+    currentQueryURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=6133582a13f76cf0a556408e3196e907&units=imperial";
+    $.ajax({
+        url: currentQueryURL,
+        type: "GET"
+    }).done(function (response) {
+        console.log(response);
+    })
+
 }
