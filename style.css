@@ -1,0 +1,29 @@
+
+html{ 
+    height: 100%;
+}
+body{
+    min-height: 100%;
+}
+.column{
+    flex-direction: column;
+    padding: 12px;
+}
+p{
+    margin: 12px;
+}
+.menu-wrapper{
+    padding-left: 10px;
+}
+.display-wrapper{
+    padding-right: 10px;
+}
+
+.wrapper{
+    padding: 12px;
+}
+
+.rounded{
+    border-radius: 15%;
+}
+

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+</head>
+
+<body>
+    <div class="navbar has-background-dark level">
+        <div class="navbar-item is-centered level-item">
+            <h1 class="is-size-1 has-text-centered has-text-light">Weather Dashboard</h1>
+        </div>
+    </div>
+    <div class="columns is-vcentered">
+
+        <div class="column has-background-light is-flex is-one-third" id="menu">
+            <div class="menu-wrapper">
+                <h1 class="is-size-2">Search for a City:</h1>
+                <div class="field is-grouped">
+                    <p class="control is-expanded">
+                        <input class="input" type="text" id="searchBox" placeholder="Enter City">
+                    </p>
+                    <p class="control">
+                        <button class="button is-info" id="searchButton">
+                            Search
+                        </button>
+                    </p>
+                </div>
+                <button class="button is-large is-fullwidth">Austin</button>
+                <button class="button is-large is-fullwidth">Chicago</button>
+                <button class="button is-large is-fullwidth">New York</button>
+                <button class="button is-large is-fullwidth">Orland</button>
+                <button class="button is-large is-fullwidth">San Francisco</button>
+                <button class="button is-large is-fullwidth">Seattle</button>
+                <button class="button is-large is-fullwidth">Denver</button>
+                <button class="button is-large is-fullwidth">Atlanta</button>
+            </div>
+        </div>
+
+        <div class="display-wrapper">
+            <div class="column">
+                <div class="columns">
+                    <div class="column">
+                        <div class="box" id="weather-display">
+                            <progress class="progress is-small is-primary" max="100">15%</progress>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <h1 class="is-size-2">5-Day Forecast:</h1>
+                    </div>
+                    
+                </div>
+                <div class="columns is-vcentered">
+                    <div class="column is-one-fifth">
+                        <div class="notification is-link">
+                            Primar lorem ipsum dolor sit amet, consectetur
+                            adipiscing elit lorem ipsum dolor. <strong>Pellentesque risus mi</strong>
+                        </div>
+                    </div>
+                    <div class="column is-one-fifth">
+                        <div class="notification is-link">
+                            Primar lorem ipsum dolor sit amet, consectetur
+                            adipiscing elit lorem ipsum dolor. <strong>Pellentesque risus mi</strong>
+                        </div>
+                    </div>
+                    <div class="column is-one-fifth">
+                        <div class="notification is-link">
+                            Primar lorem ipsum dolor sit amet, consectetur
+                            adipiscing elit lorem ipsum dolor. <strong>Pellentesque risus mi</strong>
+                        </div>
+                    </div>
+                    <div class="column is-one-fifth">
+                        <div class="notification is-link">
+                            Primar lorem ipsum dolor sit amet, consectetur
+                            adipiscing elit lorem ipsum dolor. <strong>Pellentesque risus mi</strong>
+                        </div>
+                    </div>
+                    <div class="column is-one-fifth">
+                        <div class="notification is-link">
+                            Primar lorem ipsum dolor sit amet, consectetur
+                            adipiscing elit lorem ipsum dolor. <strong>Pellentesque risus mi</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
