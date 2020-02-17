@@ -68,7 +68,7 @@ function uvCall(latitude, longitude, city, temp, humidity, windSpeed) {
     })
 }
 
-$("#menu").on("click", "button", function(e){
+$("#menu").on("click", "button", function (e) {
     let searchValue = e.target.textContent;
     currentWeatherCall(searchValue);
     forcastWeatherCall(searchValue);
@@ -82,6 +82,34 @@ function forcastWeatherCall(city) {
         type: "GET"
     }).done(function (response) {
         console.log(response);
+        $("#forecastRow").empty();
+        let iterator = 0;
+        for (let i = 0; i < 40; i++) {
+            let currentDate = response.list[i].dt_txt.toString().slice(0, 10);
+            let callDate = moment().format("YYYY") + "-" + moment().format("MM") + "-" + (parseInt(moment().format("D")) + iterator + 1);
+
+            console.log(callDate);
+            if (currentDate === callDate) {
+                let temp = response.list[i].main.temp;
+                let humidity = response.list[i].main.humidity;
+                iterator++;
+                forecastDisplay(temp, humidity, iterator);
+            }
+        }
     })
+
+}
+
+function forecastDisplay(temp, humidity, i) {
+
+    $("#forecastRow").append(
+        $("<div>").attr("class", "column is-one-fifth").append(
+            $("<div>").attr("class", "notification is-link").append(
+                $("<h3>").text(moment().format("MM") + "/" + (parseInt(moment().format("D")) + i + 1) + "/" + moment().format("YYYY")),
+                $("<p>").text("Temp: " + temp),
+                $("<p>").text("Humidity: " + humidity)
+            )
+        )
+    )
 
 }
