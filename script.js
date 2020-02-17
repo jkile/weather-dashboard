@@ -22,16 +22,21 @@ function getCurrentCity(pos) {
     })
 }
 
-function weatherDisplay(city, temp, humidity, windSpeed, uvIndex) {
+function weatherDisplay(city, temp, humidity, windSpeed, uvIndex, icon) {
     $("#weather-display").empty();
     $("#weather-display").append(
-        $("<h1>").text(city + "(" + date + ")").attr("class", "is-size-2"),
+        $("<h1>").text(city + "(" + date + ")").attr({class: "is-size-2", id: "displayDate"}).append(
+            $("<span>").append(
+                $("<img>").attr({src: icon})
+            )
+        ),
         $("<p>").text("Temperature: " + temp + "F"),
         $("<p>").text("Humidity: " + humidity + "%"),
         $("<p>").text("Wind Speed: " + windSpeed + "MPH"),
         $("<p>").text("UV Index: ").append(
             $("<span>").text(uvIndex).attr("class", "has-background-danger has-text-light wrapper rounded")
         )
+
     )
 
 }
@@ -54,17 +59,19 @@ function currentWeatherCall(city) {
         windSpeed = response.wind.speed;
         latitude = response.coord.lat;
         longitude = response.coord.lon;
-        uvCall(latitude, longitude, city, temp, humidity, windSpeed);
+        let icon = "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
+        console.log(icon);
+        uvCall(latitude, longitude, city, temp, humidity, windSpeed, icon);
     })
 }
 
-function uvCall(latitude, longitude, city, temp, humidity, windSpeed) {
+function uvCall(latitude, longitude, city, temp, humidity, windSpeed, icon) {
     $.ajax({
         url: "http://api.openweathermap.org/data/2.5/uvi?appid=6133582a13f76cf0a556408e3196e907&lat=" + latitude + "&lon=" + longitude,
         type: "GET"
     }).done(function (response) {
         uvIndex = response.value;
-        weatherDisplay(city, temp, humidity, windSpeed, uvIndex)
+        weatherDisplay(city, temp, humidity, windSpeed, uvIndex, icon)
     })
 }
 
@@ -81,32 +88,31 @@ function forcastWeatherCall(city) {
         url: currentQueryURL,
         type: "GET"
     }).done(function (response) {
-        console.log(response);
         $("#forecastRow").empty();
         let iterator = 0;
         for (let i = 0; i < 40; i++) {
-            let currentDate = response.list[i].dt_txt.toString();
-            let callDate = moment().format("YYYY") + "-" + moment().format("MM") + "-" + (parseInt(moment().format("D")) + iterator + 1) + " 12:00:00";
-            console.log(callDate);
+            let currentDate = response.list[i].dt_txt.toString().slice(0,10);
+            let callDate = moment().format("YYYY") + "-" + moment().format("MM") + "-" + (parseInt(moment().format("D")) + iterator + 1);
             if (currentDate === callDate) {
+                let icon = "http://openweathermap.org/img/w/" + response.list[i].weather[0].icon + ".png"
                 let temp = response.list[i].main.temp;
                 let humidity = response.list[i].main.humidity;
+                forecastDisplay(temp, humidity, icon, iterator);
                 iterator++;
-                forecastDisplay(temp, humidity, iterator);
             }
         }
     })
 
 }
 
-function forecastDisplay(temp, humidity, i) {
-
+function forecastDisplay(temp, humidity, icon, i) {
     $("#forecastRow").append(
         $("<div>").attr("class", "column is-one-fifth").append(
-            $("<div>").attr("class", "notification is-link").append(
-                $("<h3>").text(moment().format("MM") + "/" + (parseInt(moment().format("D")) + i + 1) + "/" + moment().format("YYYY")),
-                $("<p>").text("Temp: " + temp),
-                $("<p>").text("Humidity: " + humidity)
+            $("<div>").attr("class", "notification is-link stretch").append(
+                $("<h3>").text(moment().format("MM") + "/" + (parseInt(moment().format("D")) + i + 1) + "/" + moment().format("YYYY")).attr("class", "is-size-5 has-text-weight-semibold"),
+                $("<img>").attr("src", icon),
+                $("<div>").text("Temp: " + temp),
+                $("<div>").text("Humidity: " + humidity + "%")
             )
         )
     )

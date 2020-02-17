@@ -26,4 +26,6 @@ p{
 .rounded{
     border-radius: 15%;
 }
-
+.stretch{
+    min-height: 100%;
+}
