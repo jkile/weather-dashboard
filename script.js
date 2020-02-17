@@ -85,9 +85,8 @@ function forcastWeatherCall(city) {
         $("#forecastRow").empty();
         let iterator = 0;
         for (let i = 0; i < 40; i++) {
-            let currentDate = response.list[i].dt_txt.toString().slice(0, 10);
-            let callDate = moment().format("YYYY") + "-" + moment().format("MM") + "-" + (parseInt(moment().format("D")) + iterator + 1);
-
+            let currentDate = response.list[i].dt_txt.toString();
+            let callDate = moment().format("YYYY") + "-" + moment().format("MM") + "-" + (parseInt(moment().format("D")) + iterator + 1) + " 12:00:00";
             console.log(callDate);
             if (currentDate === callDate) {
                 let temp = response.list[i].main.temp;
