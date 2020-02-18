@@ -25,19 +25,26 @@ function getCurrentCity(pos) {
 function weatherDisplay(city, temp, humidity, windSpeed, uvIndex, icon) {
     $("#weather-display").empty();
     $("#weather-display").append(
-        $("<h1>").text(city + "(" + date + ")").attr({class: "is-size-2", id: "displayDate"}).append(
+        $("<h1>").text(city + "(" + date + ")").attr({ class: "is-size-2", id: "displayDate" }).append(
             $("<span>").append(
-                $("<img>").attr({src: icon})
+                $("<img>").attr({ src: icon })
             )
         ),
         $("<p>").text("Temperature: " + temp + "F"),
         $("<p>").text("Humidity: " + humidity + "%"),
         $("<p>").text("Wind Speed: " + windSpeed + "MPH"),
         $("<p>").text("UV Index: ").append(
-            $("<span>").text(uvIndex).attr("class", "has-background-danger has-text-light wrapper rounded")
+            $("<span>").text(uvIndex).attr({class: "has-background-danger has-text-light wrapper rounded", id: "uvDisplay"})
         )
-
+    
     )
+    if(uvIndex < 3){
+        $("#uvDisplay").attr({class: "has-background-primary has-text-light wrapper rounded", id: "uvDisplay"})
+    } else if(uvIndex >= 3 && uvIndex <= 5){
+        $("#uvDisplay").attr({class: "has-background-warning has-text-light wrapper rounded", id: "uvDisplay"})
+    } else if(uvIndex > 5){
+        $("#uvDisplay").attr({class: "has-background-danger has-text-light wrapper rounded", id: "uvDisplay"})
+    }
 
 }
 
@@ -60,7 +67,6 @@ function currentWeatherCall(city) {
         latitude = response.coord.lat;
         longitude = response.coord.lon;
         let icon = "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
-        console.log(icon);
         uvCall(latitude, longitude, city, temp, humidity, windSpeed, icon);
     })
 }
@@ -89,9 +95,10 @@ function forcastWeatherCall(city) {
         type: "GET"
     }).done(function (response) {
         $("#forecastRow").empty();
+        console.log(response);
         let iterator = 0;
         for (let i = 0; i < 40; i++) {
-            let currentDate = response.list[i].dt_txt.toString().slice(0,10);
+            let currentDate = response.list[i].dt_txt.toString().slice(0, 10);
             let callDate = moment().format("YYYY") + "-" + moment().format("MM") + "-" + (parseInt(moment().format("D")) + iterator + 1);
             if (currentDate === callDate) {
                 let icon = "http://openweathermap.org/img/w/" + response.list[i].weather[0].icon + ".png"
@@ -99,6 +106,9 @@ function forcastWeatherCall(city) {
                 let humidity = response.list[i].main.humidity;
                 forecastDisplay(temp, humidity, icon, iterator);
                 iterator++;
+                if(iterator === 5){
+                    return;
+                }
             }
         }
     })
@@ -116,5 +126,4 @@ function forecastDisplay(temp, humidity, icon, i) {
             )
         )
     )
-
 }
