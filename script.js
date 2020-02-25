@@ -30,7 +30,7 @@ function weatherDisplay(city, temp, humidity, windSpeed, uvIndex, icon) {
                 $("<img>").attr({ src: icon })
             )
         ),
-        $("<p>").text("Temperature: " + temp + "F"),
+        $("<p>").text("Temperature: " + temp + "°F"),
         $("<p>").text("Humidity: " + humidity + "%"),
         $("<p>").text("Wind Speed: " + windSpeed + "MPH"),
         $("<p>").text("UV Index: ").append(
@@ -121,9 +121,9 @@ function forecastDisplay(temp, humidity, icon, i) {
             $("<div>").attr("class", "notification is-link stretch").append(
                 $("<h3>").text(moment().format("MM") + "/" + (parseInt(moment().format("D")) + i + 1) + "/" + moment().format("YYYY")).attr("class", "is-size-5 has-text-weight-semibold"),
                 $("<img>").attr("src", icon),
-                $("<div>").text("Temp: " + temp),
+                $("<div>").text("Temp: " + temp + "°F"),
                 $("<div>").text("Humidity: " + humidity + "%")
             )
         )
-    )
+    ).hide().fadeIn("slow")
 }
