@@ -98,10 +98,8 @@ function forcastWeatherCall(city) {
         console.log(response);
         let iterator = 0;
         let i = 0;
-
         for (let k = 0; k < 5; k++) {
-            let currentDateReference = response.list[iterator].dt_txt.toString().slice(0, 10);
-            console.log(currentDateReference);
+            let currentDateReference = response.list[i].dt_txt.toString().slice(0, 10);
             while (i < 40) {
                 let currentDate = response.list[i].dt_txt.toString().slice(0, 10);
                 if (currentDate != currentDateReference) {
@@ -110,7 +108,6 @@ function forcastWeatherCall(city) {
                     let humidity = response.list[i].main.humidity;
                     let printedDate = formatDate(currentDate);
                     forecastDisplay(temp, humidity, icon, k, printedDate);
-                    iterator = i;
                     break;
                 }
                 i++;
