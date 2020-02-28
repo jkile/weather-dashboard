@@ -34,16 +34,16 @@ function weatherDisplay(city, temp, humidity, windSpeed, uvIndex, icon) {
         $("<p>").text("Humidity: " + humidity + "%"),
         $("<p>").text("Wind Speed: " + windSpeed + "MPH"),
         $("<p>").text("UV Index: ").append(
-            $("<span>").text(uvIndex).attr({class: "has-background-danger has-text-light wrapper rounded", id: "uvDisplay"})
+            $("<span>").text(uvIndex).attr({ class: "has-background-danger has-text-light wrapper rounded", id: "uvDisplay" })
         )
-    
+
     )
-    if(uvIndex < 3){
-        $("#uvDisplay").attr({class: "has-background-primary has-text-light wrapper rounded", id: "uvDisplay"})
-    } else if(uvIndex >= 3 && uvIndex <= 5){
-        $("#uvDisplay").attr({class: "has-background-warning has-text-light wrapper rounded", id: "uvDisplay"})
-    } else if(uvIndex > 5){
-        $("#uvDisplay").attr({class: "has-background-danger has-text-light wrapper rounded", id: "uvDisplay"})
+    if (uvIndex < 3) {
+        $("#uvDisplay").attr({ class: "has-background-primary has-text-light wrapper rounded", id: "uvDisplay" })
+    } else if (uvIndex >= 3 && uvIndex <= 5) {
+        $("#uvDisplay").attr({ class: "has-background-warning has-text-light wrapper rounded", id: "uvDisplay" })
+    } else if (uvIndex > 5) {
+        $("#uvDisplay").attr({ class: "has-background-danger has-text-light wrapper rounded", id: "uvDisplay" })
     }
 
 }
@@ -97,33 +97,45 @@ function forcastWeatherCall(city) {
         $("#forecastRow").empty();
         console.log(response);
         let iterator = 0;
-        for (let i = 0; i < 40; i++) {
-            let currentDate = response.list[i].dt_txt.toString().slice(0, 10);
-            let callDate = moment().format("YYYY") + "-" + moment().format("MM") + "-" + (parseInt(moment().format("D")) + iterator + 1);
-            if (currentDate === callDate) {
-                let icon = "https://openweathermap.org/img/w/" + response.list[i].weather[0].icon + ".png"
-                let temp = response.list[i].main.temp;
-                let humidity = response.list[i].main.humidity;
-                forecastDisplay(temp, humidity, icon, iterator);
-                iterator++;
-                if(iterator === 5){
-                    return;
+        let i = 0;
+
+        for (let k = 0; k < 5; k++) {
+            let currentDateReference = response.list[iterator].dt_txt.toString().slice(0, 10);
+            console.log(currentDateReference);
+            while (i < 40) {
+                let currentDate = response.list[i].dt_txt.toString().slice(0, 10);
+                if (currentDate != currentDateReference) {
+                    let icon = "https://openweathermap.org/img/w/" + response.list[i].weather[0].icon + ".png";
+                    let temp = response.list[i].main.temp;
+                    let humidity = response.list[i].main.humidity;
+                    let printedDate = formatDate(currentDate);
+                    forecastDisplay(temp, humidity, icon, k, printedDate);
+                    iterator = i;
+                    break;
                 }
+                i++;
             }
         }
     })
 
 }
 
-function forecastDisplay(temp, humidity, icon, i) {
+function forecastDisplay(temp, humidity, icon, i, currentDateReference) {
     $("#forecastRow").append(
         $("<div>").attr("class", "column is-one-fifth").append(
             $("<div>").attr("class", "notification is-link stretch").append(
-                $("<h3>").text(moment().format("MM") + "/" + (parseInt(moment().format("D")) + i + 1) + "/" + moment().format("YYYY")).attr("class", "is-size-5 has-text-weight-semibold"),
+                $("<h3>").text(currentDateReference).attr("class", "is-size-5 has-text-weight-semibold"),
                 $("<img>").attr("src", icon),
                 $("<div>").text("Temp: " + temp + "°F"),
                 $("<div>").text("Humidity: " + humidity + "%")
             )
         )
     ).hide().fadeIn("slow")
+}
+
+function formatDate(date) {
+    let year = date.slice(0, 4);
+    let month = date.slice(5, 7);
+    let day = date.slice(8, 10);
+    return month + "/" + day + "/" + year;
 }
